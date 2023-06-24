@@ -17,7 +17,16 @@ const App = () => {
     const personObject = {
       name: newName
     }
-    setPersons(persons.concat(personObject))
+    for (let i = 0; i < persons.length; i++) {
+      if (JSON.stringify(persons[i]) === JSON.stringify(personObject)) {
+        delete personObject.name
+        alert(`${newName} is already added to the phonebook`)
+      }
+    }
+    
+    if(personObject.name !== undefined) {
+      setPersons(persons.concat(personObject))
+    }
     setNewName('')
   }
 
