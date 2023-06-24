@@ -1,30 +1,4 @@
-const Header1 = ({ name }) => <h1>{name}</h1>
-const Header2 = ({ name }) => <h2>{name}</h2>
-
-const Part = ({ course }) => {
-  return course.parts.map(part => <p key={part.id}> {part.name} {part.exercises} </p>)
-}
-
-const Sum = ({ sum }) => <h3>total of {sum} exercises</h3>
-
-
-const Course = ({ courses }) => {
-  return (
-    <div>
-    <Header1 name='Web development curriculum' />
-    {courses.map(course =>
-        <>
-          <Header2 name={course.name} key={course.id} />
-          <Part course={course} />
-          <Sum sum={course.parts.reduce((sum, part) => sum + part.exercises, 0)} />
-        </>
-    )}
-      
-
-    </div>
-  )
-}
-
+import Course from "./components/Course"
 
 
 const App = () => {
