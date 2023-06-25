@@ -21,6 +21,7 @@ const App = () => {
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
   }
+  
   let display = []
   newFilter === '' ? display = persons : display = persons.filter(person => person.name.toLowerCase().includes(newFilter))
 
