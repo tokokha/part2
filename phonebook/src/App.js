@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Search from './components/Search'
+import Form from './components/Form'
+import PhoneBook from './components/PhoneBook'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -42,6 +45,8 @@ const App = () => {
     
     if (personObject.name !== undefined && personObject.number !== undefined && personObject.name !== '' && personObject.number !== '') {
       setPersons(persons.concat(personObject))
+    } else {
+      alert('Please fill the form again')
     }
     setNewName("")
     setNewNumber("")
@@ -50,20 +55,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <input value={newFilter} onChange={handleFilterChange} />
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input placeholder='Arto Hellas' value={newName} onChange={handleNameChange}/>
-        </div>
-        <div>
-          number: <input placeholder='12345678' value={newNumber} onChange={handleNumberChange}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      {display.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      <Search value={newFilter} onChange={handleFilterChange} />
+      <Form onSubmit={addPerson} inputs={[
+        { text: 'name', value: newName, onChange: handleNameChange},
+        { text: 'number', value: newNumber, onChange: handleNumberChange}
+      ]}/>
+      <PhoneBook data={display} />
     </div>
   )
 }
