@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Search from './components/Search'
 import Form from './components/Form'
 import PhoneBook from './components/PhoneBook'
+import nameService from './services/names'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,13 +11,9 @@ const App = () => {
   const [newFilter, setFilter] = useState('')
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
+    nameService.getAll().then(initialNotes => {
+      setPersons(initialNotes)
+    })
   }, [])
 
   const handleNameChange = (event) => {
@@ -49,12 +45,10 @@ const App = () => {
     }
     
     if (personObject.name !== undefined && personObject.number !== undefined && personObject.name !== '' && personObject.number !== '') {
-      axios
-        .post('http://localhost:3001/persons', personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data))
-          setNewName('')
-          setNewNumber('')
+      nameService.create(personObject).then(returnedName => {
+        setPersons(persons.concat(returnedName))
+        setNewName('')
+        setNewNumber('')
       })
     } else {
       alert('Please fill the form again')
