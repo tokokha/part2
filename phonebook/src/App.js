@@ -49,12 +49,16 @@ const App = () => {
     }
     
     if (personObject.name !== undefined && personObject.number !== undefined && personObject.name !== '' && personObject.number !== '') {
-      setPersons(persons.concat(personObject))
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewNumber('')
+      })
     } else {
       alert('Please fill the form again')
     }
-    setNewName("")
-    setNewNumber("")
   }
 
   return (
