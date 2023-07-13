@@ -26,6 +26,17 @@ const App = () => {
     setFilter(event.target.value)
   }
   
+  const handlePersonRemoval = (id) => {
+    const individual = persons.filter(person => person.id === id)
+    const individualName = individual[0].name
+    const individualId = individual[0].id
+    if (window.confirm(`Do you really want to delete ${individualName} ?`)){
+      nameService.remove(individualId)
+      setPersons(persons.filter(person => person.id !== individualId))
+      console.log("removed")
+    }
+  }
+  
   let display = []
   newFilter === '' ? display = persons : display = persons.filter(person => person.name.toLowerCase().includes(newFilter))
 
@@ -63,7 +74,7 @@ const App = () => {
         { text: 'name', value: newName, onChange: handleNameChange},
         { text: 'number', value: newNumber, onChange: handleNumberChange}
       ]}/>
-      <PhoneBook data={display} />
+      <PhoneBook data={display} removeExpression={handlePersonRemoval} />
     </div>
   )
 }

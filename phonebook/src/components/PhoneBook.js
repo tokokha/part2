@@ -1,8 +1,12 @@
-const PhoneBook = ({ data }) => {
+import Person from "./Person"
+
+const PhoneBook = ({ data, removeExpression }) => {
     return (
             <div>
                 <h2>Numbers</h2>
-                {data.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+                <ul>
+                    {data.map(person => <Person key={person.name} info={person} removeHandler={removeExpression}/>)}
+                </ul>
             </div>
     )
 }
