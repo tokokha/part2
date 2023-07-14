@@ -42,26 +42,45 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
+    let personFound = false
     const personObject = {
       name: newName,
       number: newNumber
     }
     for (let i = 0; i < persons.length; i++) {
-      if (JSON.stringify(persons[i].name) === JSON.stringify(personObject.name) || JSON.stringify(persons[i].number) === JSON.stringify(personObject.number)) {
+      if (JSON.stringify(persons[i].number) === JSON.stringify(personObject.number)) {
         personObject.name = ""
         personObject.number = ""
-        alert(`${newName} or ${newNumber} is already added to the phonebook`)
-        break
-      }
+        alert(`${newNumber} is already added to the phonebook`)
+    }
+      if (JSON.stringify(persons[i].name) === JSON.stringify(personObject.name) && window.confirm(`${personObject.name} is already added to the phonebook, replace the old number with the new one?`) ) {
+        const filteredPerson = persons.find(person => JSON.stringify(person.name) === JSON.stringify(personObject.name))
+        const changedPerson = {...filteredPerson, number: personObject.number}
+        nameService.update(filteredPerson.id, changedPerson).then(returnedPerson => {
+          console.log(persons)
+          setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+          personObject.name = ""
+          personObject.number = ""
+          console.log(personObject, newName, newNumber, "iqane")
+        }
+        )
+        setNewName("")
+        setNewNumber("")
+        console.log(personObject, newName, newNumber, "iqsane")
+        personFound = true
+    }
     }
     
-    if (personObject.name !== undefined && personObject.number !== undefined && personObject.name !== '' && personObject.number !== '') {
+    if (!personFound && personObject.name !== undefined && personObject.number !== undefined && personObject.name !== '' && personObject.number !== '') {
+      console.log(personObject, 'aqane')
       nameService.create(personObject).then(returnedName => {
+        console.log(persons.concat(returnedName))
+        console.log(personObject)
         setPersons(persons.concat(returnedName))
         setNewName('')
         setNewNumber('')
       })
-    } else {
+    } else if (!personFound) {
       alert('Please fill the form again')
     }
   }
