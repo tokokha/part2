@@ -12,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setFilter] = useState('') 
   const [errorMessage, setErrorMessage] = useState('')
+  const [errorStyle, setErrorStyle] = useState('')
 
   useEffect(() => {
     nameService.getAll().then(initialNotes => {
@@ -61,16 +62,25 @@ const App = () => {
         const changedPerson = {...filteredPerson, number: personObject.number}
         nameService.update(filteredPerson.id, changedPerson).then(returnedPerson => {
           setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+          personObject.name = ""
+          personObject.number = ""
+          setErrorStyle('good')
           setErrorMessage(
-            `${changedPerson.name}s number was succesfully changed`
+            `${changedPerson.name} information was succesfully changed`
           )
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
-          personObject.name = ""
-          personObject.number = ""
-        }
-        )
+        })
+        .catch(error => {
+          setErrorStyle('bad')
+          setErrorMessage(
+            `${changedPerson.name} information was already deleted`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })
         setNewName("")
         setNewNumber("")
         personFound = true
@@ -81,6 +91,7 @@ const App = () => {
       console.log(personObject, 'aqane')
       nameService.create(personObject).then(returnedName => {
         setPersons(persons.concat(returnedName))
+        setErrorStyle('good')
         setErrorMessage(
           `${personObject.name} was succesfully added`
         )
@@ -98,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
+      <Notification message={errorMessage} style={errorStyle}/>
       <Search value={newFilter} onChange={handleFilterChange} />
       <Form onSubmit={addPerson} inputs={[
         { text: 'name', value: newName, onChange: handleNameChange},
