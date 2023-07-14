@@ -3,12 +3,15 @@ import Search from './components/Search'
 import Form from './components/Form'
 import PhoneBook from './components/PhoneBook'
 import nameService from './services/names'
+import Notification from './components/Notification'
+
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [newFilter, setFilter] = useState('')
+  const [newFilter, setFilter] = useState('') 
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     nameService.getAll().then(initialNotes => {
@@ -57,16 +60,19 @@ const App = () => {
         const filteredPerson = persons.find(person => JSON.stringify(person.name) === JSON.stringify(personObject.name))
         const changedPerson = {...filteredPerson, number: personObject.number}
         nameService.update(filteredPerson.id, changedPerson).then(returnedPerson => {
-          console.log(persons)
           setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
+          setErrorMessage(
+            `${changedPerson.name}s number was succesfully changed`
+          )
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
           personObject.name = ""
           personObject.number = ""
-          console.log(personObject, newName, newNumber, "iqane")
         }
         )
         setNewName("")
         setNewNumber("")
-        console.log(personObject, newName, newNumber, "iqsane")
         personFound = true
     }
     }
@@ -74,9 +80,13 @@ const App = () => {
     if (!personFound && personObject.name !== undefined && personObject.number !== undefined && personObject.name !== '' && personObject.number !== '') {
       console.log(personObject, 'aqane')
       nameService.create(personObject).then(returnedName => {
-        console.log(persons.concat(returnedName))
-        console.log(personObject)
         setPersons(persons.concat(returnedName))
+        setErrorMessage(
+          `${personObject.name} was succesfully added`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
         setNewName('')
         setNewNumber('')
       })
@@ -88,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={errorMessage} />
       <Search value={newFilter} onChange={handleFilterChange} />
       <Form onSubmit={addPerson} inputs={[
         { text: 'name', value: newName, onChange: handleNameChange},
