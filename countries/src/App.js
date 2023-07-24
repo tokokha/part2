@@ -14,6 +14,13 @@ const App = () => {
     setCode(event.target.value)
   }
 
+  const handleCountryButton = (country) => {
+    countryservice.requestCountry(country).then(data => {
+      setContent(data)
+    })
+    console.log(country, 'clicked')
+  }
+
   useEffect(() => {
     countryservice.getAll().then(countryResponse => {
       setCountries(countryResponse.map(country => country.name.common))
@@ -48,7 +55,7 @@ const App = () => {
   return (
     <>
       <Search value={code} onChange={handleCountrySearch} />
-      <Display data={content} />
+      <Display data={content} effect={handleCountryButton}/>
     </>
   );
 }

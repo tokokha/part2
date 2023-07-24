@@ -1,4 +1,6 @@
-const Display = ({ data }) => {
+import Country from "./Country"
+
+const Display = ({ data, effect }) => {
     if (data.flag) {
         return (
             <div>
@@ -7,7 +9,7 @@ const Display = ({ data }) => {
                 <p>area {data.area}</p>
                 <h3>languages:</h3>
                 <ul>
-                    {Object.values(data.languages).map(lang => <li>{lang}</li>)}
+                    {Object.values(data.languages).map(lang => <li key={lang}>{lang}</li>)}
                 </ul>
                 <img alt="country flag" src={data.flags.png}/>
             </div>
@@ -16,7 +18,7 @@ const Display = ({ data }) => {
         return (
             <div>
                 <ul>
-                    {data.map(country => <li>{country}</li>)}
+                    {data.map(country => <Country key={country} country={country} effect={effect}/>)}
                 </ul>
             </div>
         )
