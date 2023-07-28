@@ -12,4 +12,9 @@ const requestCountry = (code) => {
     return request.then(response => response.data)
 }
 
-export default { requestCountry, getAll }
+const getWeather = (capital) => {
+    const request = axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`)
+    return request.then(response => response.data)
+}
+
+export default { requestCountry, getAll, getWeather }

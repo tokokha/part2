@@ -50,8 +50,7 @@ const App = () => {
     }
   }, [newCountry])
   
-  
-  console.log(content)
+
   return (
     <>
       <Search value={code} onChange={handleCountrySearch} />
