@@ -18,7 +18,6 @@ const App = () => {
     countryservice.requestCountry(country).then(data => {
       setContent(data)
     })
-    console.log(country, 'clicked')
   }
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const App = () => {
 
   
   useEffect(() => {
-    console.log("effect run, country is now", code)
 
     if (code) {
       setNewCountry(countries.filter(name => name.toLowerCase().includes(code)))
